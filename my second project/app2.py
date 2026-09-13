@@ -107,14 +107,29 @@ input_data = pd.DataFrame([{
 if st.button("Predict"):
 
     prediction = model.predict(input_data)[0]
-
     probability = model.predict_proba(input_data)[0]
 
     st.subheader("Prediction")
 
-    if prediction == "M":
+    # Show prediction
+    if prediction == "M" or prediction == 1:
         st.error("Prediction: Malignant (M)")
     else:
         st.success("Prediction: Benign (B)")
 
+    # ==============================
+    # Prediction Probabilities
+    # ==============================
+
     st.write("Prediction probabilities:")
+
+    # Get the class names from the model
+    classes = model.classes_
+
+    for i, class_name in enumerate(classes):
+        if class_name == "M" or class_name == 1:
+            label = "Malignant (M)"
+        else:
+            label = "Benign (B)"
+
+        st.write(f"{label}: {probability[i] * 100:.2f}%")
